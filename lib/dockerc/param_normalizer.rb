@@ -1,7 +1,7 @@
 module Dockerc
   class ParamNormalizer
     def for_inbound(s)
-      s.gsub(/(.)([A-Z])/,'\1_\2').downcase.to_sym
+      s.to_s.gsub(/(.)([A-Z])/,'\1_\2').downcase.to_sym
     end
 
     def for_outbound(s)

@@ -8,6 +8,7 @@ class ParamNormalizerTest < MiniTest::Unit::TestCase
   def test_normalize_incoming_params
     n = Dockerc::ParamNormalizer.new
     assert_equal :command, n.for_inbound('Command')
+    assert_equal :command, n.for_inbound(:Command)
   end
 
   def test_normaliz_outgoing_params
