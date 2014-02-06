@@ -26,7 +26,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      JSON.parse(json, symbolize_names: true).map do |h|
+      JSON.parse(json).map do |h|
         h.inject({}) do |memo, (k,v)|
           memo[param_normalizer.for_inbound(k)] = v
           memo
