@@ -1,7 +1,7 @@
 require 'uri'
 
 require 'excon'
-require 'json'
+require 'multi_json'
 
 require 'dockerc/client'
 require 'dockerc/errors'

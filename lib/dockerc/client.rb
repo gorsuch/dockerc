@@ -26,7 +26,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      normalizer.handle_response_data(JSON.parse(json))
+      normalizer.handle_response_data(MultiJson.load(json))
     end
 
     def create_container(params)
@@ -43,7 +43,7 @@ module Dockerc
         raise Dockerc::Errors::ImageNotFound
       end
 
-      normalizer.handle_response_data(JSON.parse(res.body))
+      normalizer.handle_response_data(MultiJson.load(res.body))
     end
 
     def images
@@ -53,13 +53,13 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      normalizer.handle_response_data(JSON.parse(json))
+      normalizer.handle_response_data(MultiJson.load(json))
     end
 
     def pull_image(name)
       parts = []
       streamer = lambda do |chunk, remaining_bytes, total_bytes|
-        data = JSON.parse(chunk)
+        data = MultiJson.load(chunk)
         parts << normalizer.handle_response_data(data)
       end
       body = connection.post({
