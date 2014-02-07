@@ -31,6 +31,23 @@ module Dockerc
       end
     end
 
+    def create_container(params)
+      req = {
+        path:    '/containers/create',
+        body:    params.to_json,
+        expects: [ 201 ]
+      }
+      begin
+        res = connection.post(req)
+      rescue Excon::Errors::InternalServerError => e
+        raise Dockerc::Errors::ContainerCreationError, e.response.body
+      rescue Excon::Errors::NotFound
+        raise Dockerc::Errors::ImageNotFound
+      end
+
+      normalizer.response_hash(JSON.parse(res.body))
+    end
+
     def create_image(params)
       parts = []
       streamer = lambda do |chunk, remaining_bytes, total_bytes|
