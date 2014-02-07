@@ -46,21 +46,6 @@ module Dockerc
       normalizer.handle_response_data(JSON.parse(res.body))
     end
 
-    def create_image(params)
-      parts = []
-      streamer = lambda do |chunk, remaining_bytes, total_bytes|
-        data = JSON.parse(chunk)
-        parts << normalizer.handle_response_data(data)
-      end
-      body = connection.post({
-        path:    '/images/create',
-        query:   normalizer.request_query(params),
-        expects: [ 200 ],
-        response_block: streamer
-      }).body
-      parts
-    end
-
     def images
       json = connection.get({
         path:    '/images/json',
@@ -70,6 +55,23 @@ module Dockerc
 
       normalizer.handle_response_data(JSON.parse(json))
     end
+
+    def pull_image(name)
+      parts = []
+      streamer = lambda do |chunk, remaining_bytes, total_bytes|
+        data = JSON.parse(chunk)
+        parts << normalizer.handle_response_data(data)
+      end
+      body = connection.post({
+        path:    '/images/create',
+        query:   normalizer.handle_request_query(from_image: name),
+        expects: [ 200 ],
+        response_block: streamer
+      }).body
+      parts
+    end
+
+    private
 
     def normalizer
       @normalizer ||= Dockerc::Normalizer.new
