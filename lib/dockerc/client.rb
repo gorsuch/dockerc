@@ -26,19 +26,22 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      Yajl::Parser.parse(json).map do |h|
+      JSON.parse(json).map do |h|
         normalize_hash(h)
       end
     end
 
     def create_image(params)
+      parts = []
+      streamer = lambda do |chunk, remaining_bytes, total_bytes|
+        parts << JSON.parse(chunk)
+      end
       body = connection.post({
         path:    '/images/create',
         query:   normalizer.to_query_hash(params),
-        expects: [ 200 ]
+        expects: [ 200 ],
+        response_block: streamer
       }).body
-      parts = []
-      Yajl::Parser.parse(body) { |o| parts << o }
       parts
     end
 
@@ -49,7 +52,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      Yajl::Parser.parse(json).map do |h|
+      JSON.parse(json).map do |h|
         normalize_hash(h)
       end
     end
