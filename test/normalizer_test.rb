@@ -7,7 +7,8 @@ class NormalizerTest < MiniTest::Unit::TestCase
 
   def test_query_params
     n = Dockerc::Normalizer.new
-    assert_equal({'command' => 'foo'}, n.to_query_params({:command => 'foo'}))
-    assert_equal({'fromImage' => 'gorsuch/litterbox'}, n.to_query_params({:from_image => 'gorsuch/litterbox'}))
+    assert_equal({'command' => 'foo'}, n.handle_request_query({:command => 'foo'}))
+    assert_equal({'fromImage' => 'gorsuch/litterbox'}, n.handle_request_query({:from_image => 'gorsuch/litterbox'}))
+    assert_equal({'all' => 1}, n.handle_request_query({:all => true}))
   end
 end

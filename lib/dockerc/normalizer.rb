@@ -1,17 +1,28 @@
 module Dockerc
   class Normalizer
-    def request_query(h)
+    def handle_request_query(h)
       h.inject({}) do |memo,(k,v)|
-        memo[request_query_param(k)] = v
+        memo[handle_request_query_key(k)] = handle_request_query_value(v)
         memo    
       end
     end
 
-    def request_query_param(s)
+    def handle_request_query_key(s)
       parts = s.to_s.split('_')
       parts.map!(&:capitalize)
       parts.first.downcase!
       parts.join
+    end
+
+    def handle_request_query_value(s)
+      case s
+      when TrueClass
+        1
+      when FalseClass
+        0
+      else
+        s
+      end
     end
 
     def requeest_body(h)
