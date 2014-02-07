@@ -34,7 +34,8 @@ module Dockerc
     def create_image(params)
       parts = []
       streamer = lambda do |chunk, remaining_bytes, total_bytes|
-        parts << JSON.parse(chunk)
+        data = JSON.parse(chunk)
+        parts << normalize_hash(data)
       end
       body = connection.post({
         path:    '/images/create',
