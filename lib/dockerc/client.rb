@@ -32,7 +32,7 @@ module Dockerc
     def create_container(params)
       req = {
         path:    '/containers/create',
-        body:    params.to_json,
+        body:    normalizer.handle_request_data(params).to_json,
         expects: [ 201 ]
       }
       begin
