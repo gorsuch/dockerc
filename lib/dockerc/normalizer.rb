@@ -25,10 +25,16 @@ module Dockerc
       end
     end
 
-    def handle_requeest_body(h)
+    def handle_request_data(h)
+      h.inject({}) do |memo, (k,v)|
+        memo[handle_request_key(k)] = v
+        memo
+      end
     end
 
     def handle_request_key(s)
+      parts = s.to_s.split('_')
+      parts.map(&:capitalize).join
     end
   
     def handle_response_hash(h)

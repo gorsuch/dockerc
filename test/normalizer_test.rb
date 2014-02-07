@@ -12,6 +12,11 @@ class NormalizerTest < MiniTest::Unit::TestCase
     assert_equal({'all' => 1}, n.handle_request_query({:all => true}))
   end
 
+  def test_request
+    n = Dockerc::Normalizer.new
+    assert_equal({'AttachStdin' => false}, n.handle_request_data({:attach_stdin => false}))
+  end
+
   def test_response
     n = Dockerc::Normalizer.new
     assert_equal({:id => '12345', :warnings => []}, n.handle_response_data({'Id' => '12345', 'Warnings' => []}))
