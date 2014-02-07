@@ -74,12 +74,5 @@ module Dockerc
     def normalizer
       @normalizer ||= Dockerc::Normalizer.new
     end
-
-    def outbound_hash(h)
-      h.inject({}) do |memo, (k,v)|
-        memo[param_normalizer.for_outbound(k)] = v
-        memo
-      end
-    end
   end
 end
