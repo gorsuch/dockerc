@@ -25,10 +25,10 @@ module Dockerc
       end
     end
 
-    def requeest_body(h)
+    def handle_requeest_body(h)
     end
 
-    def request_body_param(s)
+    def handle_request_key(s)
     end
   
     def handle_response_hash(h)
