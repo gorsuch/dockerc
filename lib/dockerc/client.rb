@@ -26,9 +26,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      JSON.parse(json).map do |h|
-        normalizer.response_hash(h)
-      end
+      normalizer.handle_response_data(JSON.parse(json))
     end
 
     def create_container(params)
@@ -45,14 +43,14 @@ module Dockerc
         raise Dockerc::Errors::ImageNotFound
       end
 
-      normalizer.response_hash(JSON.parse(res.body))
+      normalizer.handle_response_data(JSON.parse(res.body))
     end
 
     def create_image(params)
       parts = []
       streamer = lambda do |chunk, remaining_bytes, total_bytes|
         data = JSON.parse(chunk)
-        parts << normalizer.response_hash(data)
+        parts << normalizer.handle_response_data(data)
       end
       body = connection.post({
         path:    '/images/create',
@@ -70,9 +68,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      JSON.parse(json).map do |h|
-        normalizer.response_hash(h)
-      end
+      normalizer.handle_response_data(JSON.parse(json))
     end
 
     def normalizer
