@@ -1,7 +1,7 @@
-require 'json'
 require 'uri'
 
 require 'excon'
+require 'yajl'
 
 require 'dockerc/version'
 require 'dockerc/client'

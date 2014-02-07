@@ -26,7 +26,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      JSON.parse(json).map do |h|
+      Yajl::Parser.parse(json).map do |h|
         normalize_hash(h)
       end
     end
@@ -37,7 +37,9 @@ module Dockerc
         query:   normalizer.to_query_hash(params),
         expects: [ 200 ]
       }).body
-      !!(body =~ /Download complete/)
+      parts = []
+      Yajl::Parser.parse(body) { |o| parts << o }
+      parts
     end
 
     def images
@@ -47,7 +49,7 @@ module Dockerc
         expects: [ 200 ]
       }).body
 
-      JSON.parse(json).map do |h|
+      Yajl::Parser.parse(json).map do |h|
         normalize_hash(h)
       end
     end
