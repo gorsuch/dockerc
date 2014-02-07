@@ -27,7 +27,7 @@ module Dockerc
       }).body
 
       JSON.parse(json).map do |h|
-        normalize_hash(h)
+        normalizer.response_hash(h)
       end
     end
 
@@ -35,11 +35,11 @@ module Dockerc
       parts = []
       streamer = lambda do |chunk, remaining_bytes, total_bytes|
         data = JSON.parse(chunk)
-        parts << normalize_hash(data)
+        parts << normalizer.response_hash(data)
       end
       body = connection.post({
         path:    '/images/create',
-        query:   normalizer.to_query_hash(params),
+        query:   normalizer.request_query(params),
         expects: [ 200 ],
         response_block: streamer
       }).body
@@ -54,7 +54,7 @@ module Dockerc
       }).body
 
       JSON.parse(json).map do |h|
-        normalize_hash(h)
+        normalizer.response_hash(h)
       end
     end
 
@@ -62,36 +62,11 @@ module Dockerc
       @normalizer ||= Dockerc::Normalizer.new
     end
 
-    def normalize_hash(h)
-      h.inject({}) do |memo, (k,v)|
-        memo[param_normalizer.for_inbound(k)] = v
-        memo
-      end
-    end
-
     def outbound_hash(h)
       h.inject({}) do |memo, (k,v)|
         memo[param_normalizer.for_outbound(k)] = v
         memo
       end
-    end
-
-    def normalize_query_param(s)
-      parts = s.to_s.split('_')
-      parts.map(&:upcase)
-      parts.first.downcase!
-      parts.join('')
-    end
-
-    def normalize_query_hash(h)
-      h.inject({}) do |memo, (k,v)|
-        memo[normalize_query_param(k)] = v
-        memo
-      end
-    end
-
-    def param_normalizer
-      @param_normalizer ||= Dockerc::ParamNormalizer.new
     end
   end
 end
