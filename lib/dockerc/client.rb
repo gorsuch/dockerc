@@ -27,14 +27,61 @@ module Dockerc
       }).body
 
       JSON.parse(json).map do |h|
-        h.inject({}) do |memo, (k,v)|
-          memo[param_normalizer.for_inbound(k)] = v
-          memo
-        end
+        normalize_hash(h)
       end
     end
 
-    def create_container(args)
+    def create_image(params)
+      body = connection.post({
+        path:    '/images/create',
+        query:   normalizer.to_query_hash(params),
+        expects: [ 200 ]
+      }).body
+      !!(body =~ /Download complete/)
+    end
+
+    def images
+      json = connection.get({
+        path:    '/images/json',
+        query:   { all: 1 },
+        expects: [ 200 ]
+      }).body
+
+      JSON.parse(json).map do |h|
+        normalize_hash(h)
+      end
+    end
+
+    def normalizer
+      @normalizer ||= Dockerc::Normalizer.new
+    end
+
+    def normalize_hash(h)
+      h.inject({}) do |memo, (k,v)|
+        memo[param_normalizer.for_inbound(k)] = v
+        memo
+      end
+    end
+
+    def outbound_hash(h)
+      h.inject({}) do |memo, (k,v)|
+        memo[param_normalizer.for_outbound(k)] = v
+        memo
+      end
+    end
+
+    def normalize_query_param(s)
+      parts = s.to_s.split('_')
+      parts.map(&:upcase)
+      parts.first.downcase!
+      parts.join('')
+    end
+
+    def normalize_query_hash(h)
+      h.inject({}) do |memo, (k,v)|
+        memo[normalize_query_param(k)] = v
+        memo
+      end
     end
 
     def param_normalizer
