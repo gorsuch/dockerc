@@ -68,6 +68,9 @@ module Dockerc
         expects: [ 200 ],
         response_block: streamer
       }).body
+      unless parts.last.has_key?(:id)
+        raise Dockerc::Errors::ImagePullFailed, parts
+      end
       parts
     end
 
