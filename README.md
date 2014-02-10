@@ -1,6 +1,13 @@
 # Dockerc
 
-A lightweight docker client.
+**Note: this is alpha software. The interfaces are not stable.**
+
+A lightweight docker client that focuses on:
+
+* returning simple data structures instead of any defined object model
+* normalization of parameters
+* exceptions thrown in exceptional cases
+* explicit code to reduce confusion
 
 ## Installation
 
