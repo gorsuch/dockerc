@@ -1,5 +1,7 @@
 # Dockerc
 
+[![Build Status](https://travis-ci.org/gorsuch/dockerc.png)](https://travis-ci.org/gorsuch/dockerc)
+
 **Note: this is alpha software. The interfaces are not stable.**
 
 A lightweight docker client that focuses on:
