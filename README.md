@@ -5,9 +5,11 @@
 A lightweight docker client that focuses on:
 
 * returning simple data structures instead of any defined object model
-* normalization of parameters
+* normalization of parameters (`:snake_cased` symbols for everyone!)
 * exceptions thrown in exceptional cases
-* explicit code to reduce confusion
+* explicit code paths to reduce confusion
+
+This is an early release, currently being used to prove out some process management experiments.
 
 ## Installation
 
