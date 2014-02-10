@@ -1,6 +1,6 @@
 # Dockerc
 
-TODO: Write a gem description
+A lightweight docker client.
 
 ## Installation
 
@@ -18,7 +18,23 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# connect to unix:///var/run/docker.sock
+c = Dockerc::Client.new
+# connect to an alternate docker endpoint
+c = Dockerc::Client.new(docker_url: 'http://localhost:4243')
+
+# pull an image from the public repository
+c.pull_image 'gorsuch/litterbox'
+
+# launch a container
+c.create_container :image => 'gorsuch/litterbox', :cmd => 'date'
+
+# list all containers
+c.containers
+#=> [{:command=>"date ", :created=>1392044336, :id=>"ea1c87570244276041caafb69ab2fd102c974b0b214e885304de00222b9f6bd0", :image=>"gorsuch/litterbox:latest", :names=>["/desperate_hawking"], :ports=>[], :status=>"Exit 0"}]
+
+```
 
 ## Contributing
 
